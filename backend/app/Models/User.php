@@ -46,8 +46,5 @@ class User extends Authenticatable
         return $this->hasMany(logAktivitas::class);
     }
 
-    public function scopeTersedia($query)
-    {
-        return $query->where('stok', '>', 0)->where('status_kondisi', 'Baik');
-    }
+    
 }

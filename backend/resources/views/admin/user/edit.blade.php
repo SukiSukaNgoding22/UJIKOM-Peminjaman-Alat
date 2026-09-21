@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-xl bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <form action="{{ route('admin.user.update', $user->id) }}" method="POST">
+    <form action="{{ route('admin.user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -43,6 +43,17 @@
             <input type="text" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
+
+         <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Foto Profile <span class="text-xs text-gray-400 font-normal">(Biarkan kosong jika tidak ingin mengubah foto profile)</span></label>
+                @if($user->foto_profile)
+                    <div class="mb-2">
+                        <img src="{{ asset($user->foto_profile) }}" alt="Preview" class="w-16 h-16 object-cover rounded-lg border">
+                    </div>
+                @endif
+                <input type="file" name="foto_profile" accept="image/*"
+                       class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </div>
 
         <div class="flex justify-end space-x-2">
             <a href="{{ route('admin.user.index') }}"

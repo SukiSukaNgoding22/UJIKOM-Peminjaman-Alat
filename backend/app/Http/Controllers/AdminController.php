@@ -10,6 +10,7 @@ use App\Models\Kategori;
 use App\Models\LogAktivitas;
 use App\Models\Peminjaman;
 use App\Models\Pengembalian;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -153,18 +154,26 @@ class AdminController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|string|in:admin,petugas,peminjam',
+            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        User::create([
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password), // Langsung di-hash
             'role' => $request->role,
             'no_hp' => $request->no_hp,
-        ]);
+        ];
+
+        // 2. Cek dan proses upload foto jika ada
+        if ($request->hasFile('foto_profile')) {
+            $data['foto_profile'] = $request->file('foto_profile')->store('profil_users', 'public');
+        }
+
+        // 3. Simpan ke database sekali saja secara utuh
+        User::create($data);
 
         return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan.');
-
     }
 
     public function editUser($id)
@@ -181,16 +190,21 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|string|in:admin,petugas,peminjam',
+            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
             'no_hp' => $request->no_hp,
         ];
-        
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+
+            if ($request->hasFile('foto_profile')) {
+                if ($user->foto_profile) {
+                    Storage::disk('public')->delete($user->foto_profile);
+                }
+            $data['foto_profile'] = $request->file('foto_profile')->store('profil_users', 'public');
         }
 
         $user->update($data);

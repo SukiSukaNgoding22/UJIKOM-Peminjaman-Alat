@@ -44,6 +44,7 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-100 text-gray-600 text-sm uppercase tracking-wider">
+                        <th class="py-3 px-4 border-b">Profil</th>
                         <th class="py-3 px-4 border-b">Nama</th>
                         <th class="py-3 px-4 border-b">Email</th>
                         <th class="py-3 px-4 border-b">Role / Hak Akses</th>
@@ -54,6 +55,15 @@
                 <tbody class="text-gray-700 text-sm">
                     @forelse($users as $user)
                         <tr class="hover:bg-gray-50 transition">
+                            <td class="py-3 px-4 border-b">
+                                @if($user->foto_profile)
+                                    <img src="{{ asset('storage/' . $user->foto_profile) }}" alt="Foto {{ $user->name }}" class="w-10 h-10 rounded-full object-cover border border-gray-300">
+                                @else
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border border-emerald-200">
+                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                            </div>
+                                @endif
+                            </td>
                             <td class="py-3 px-4 border-b font-medium text-gray-900">{{ $user->name }}</td>
                             <td class="py-3 px-4 border-b">{{ $user->email }}</td>
                             <td class="py-3 px-4 border-b">
