@@ -43,6 +43,14 @@
                     class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('admin.pengembalian.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     Kelola Pengembalian
                 </a>
+                <a href="{{ route('admin.laporan.index') }}" 
+                    class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('admin.laporan.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    Cetak Laporan
+                </a>
+                <a href="{{ route('admin.log-aktivitas.index') }}" 
+                    class="block px-4 py-2 rounded-lg transition {{ request()->routeIs('admin.log-aktivitas.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    Log Aktivitas
+                </a>
                 @endif
 
                 <!-- MENU KHUSUS PETUGAS -->
@@ -55,8 +63,14 @@
 
                 <a href="{{ route('petugas.pengembalian.index') }}"
                     class="block px-4 py-2 rounded-lg transition {{ 
-                    request()->routeIs('petugas.pengembalian.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    request()->routeIs('petugas.pengembalian.index') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     Pemantauan Pengembalian
+                </a>
+
+                <a href="{{ route('petugas.pengembalian.menunggu') }}" 
+                    class="block px-4 py-2 rounded-lg transition {{ 
+                    request()->routeIs('*pengembalian.menunggu', '*pengembalian.halaman_proses') ? 'bg-gray-800 text-white' : 'text-gray-400' }}">
+                        Persetujuan Pengembalian
                 </a>
 
                 <a href="{{ route('petugas.laporan.index') }}"

@@ -28,7 +28,7 @@
                         Cari
                     </button>
                     @if(request('search'))
-                        <a href="{{ route('admin.kategori.index') }}"
+                        <a href="{{ route('admin.peminjaman.index') }}"
                            class="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-700 px-3 py-2 text-sm rounded-lg flex items-center transition">
                             Reset
                         </a>
@@ -70,14 +70,15 @@
                             </td>
                 
                             <td class="py-3 px-4 border-b text-xs text-gray-600">
-                                <span class="block">Pinjam: {{ $peminjaman->tgl_pinjam }}</span>
-                                <span class="block font-semibold">Rencana: {{ $peminjaman->tgl_kembali_plan }}</span>
+                                <span class="block">Pinjam: {{ \Carbon\Carbon::parse($peminjaman->tgl_pinjam)->format('d M Y') }}</span>
+                                <span class="block font-semibold">Rencana: {{ \Carbon\Carbon::parse($peminjaman->tgl_kembali_plan)->format('d M Y') }}</span>
                             </td>
                             <td class="py-3 px-4 border-b">
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full
                                 @if($peminjaman->status == 'diajukan') bg-yellow-100 text-yellow-800
                                 @elseif($peminjaman->status == 'dipinjam') bg-blue-100 text-blue-800
                                 @elseif($peminjaman->status == 'dikembalikan') bg-emerald-100 text-emerald-800
+                                @elseif($peminjaman->status == 'menunggu_persetujuan') bg-purple-100 text-purple-800
                                 @else bg-red-100 text-red-800 @endif">
                                 {{ ucfirst($peminjaman->status) }}
                             </span>
@@ -91,6 +92,7 @@
                                         <select name="status" onchange="this.form.submit()" class="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none">
                                             <option value="diajukan" {{ $peminjaman->status == 'diajukan' ? 'selected' : ''}}>Diajukan</option>
                                             <option value="dipinjam" {{ $peminjaman->status == 'dipinjam' ? 'selected' : ''}}>Dipinjam</option>
+                                            <option value="menunggu_persetujuan" {{ $peminjaman->status == 'menunggu_persetujuan' ? 'selected' : ''}}>Menunggu Persetujuan</option>
                                             <option value="dikembalikan" {{ $peminjaman->status == 'dikembalikan' ? 'selected' : ''}}>Dikembalikan</option>
                                             <option value="telat" {{ $peminjaman->status == 'telat' ? 'selected' : ''}}>Telat</option>
                                         </select>

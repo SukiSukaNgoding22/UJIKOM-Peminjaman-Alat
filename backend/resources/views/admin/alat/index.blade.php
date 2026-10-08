@@ -10,6 +10,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="mb-4 bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg shadow-sm text-sm">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
         <div class="p-5 border-b border-gray-200 bg-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
             <h3 class="text-lg font-bold text-gray-800">Daftar Alat Laboratorium</h3>
@@ -55,7 +61,7 @@
                         <tr class="hover:bg-gray-50 transition">
                             <td class="py-3 px-4 border-b">
                                 @if($alat->gambar)
-                                    <img src="{{ asset($alat->gambar) }}" alt="{{ $alat->nama_alat }}" class="w-12 h-12 object-cover rounded-lg border">
+                                    <img src=" {{ asset($alat->gambar) }} " alt="{{ $alat->nama_alat }}" class="w-12 h-12 object-cover rounded-lg border">
                                 @else
                                     <span class="text-xs text-gray-400 italic">Tidak ada</span>
                                 @endif

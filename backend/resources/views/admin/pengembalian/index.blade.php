@@ -57,7 +57,7 @@
                 <tbody class="text-gray-700 text-sm">
                     @forelse($pengembalians as $pengembalian)
                         <tr class="hover:bg-gray-50 transition align-top">
-                            <td class="py-3 px-4 border-b">{{ $pengembalian->tgl_kembali }}</td>
+                            <td class="py-3 px-4 border-b">{{ \Carbon\Carbon::parse($pengembalian->tgl_kembali_plan)->format('d M Y') }}</td>
                             <td class="py-3 px-4 border-b font-medium text-gray-900">
                                 {{ $pengembalian->peminjaman->user->name ?? 'User Dihapus' }}
                             </td>

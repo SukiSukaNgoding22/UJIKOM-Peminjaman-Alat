@@ -37,7 +37,7 @@ class PeminjamController extends Controller
                 DetailPinjam::create([
                     'peminjaman_id' => $peminjaman->id,
                     'alat_id' => $alatId,
-                    'jumlah' => $request->jumlah[$index],
+                    'jumlah' => $request->jumlah[$alatId],
                 ]);
             }
 
@@ -58,5 +58,37 @@ class PeminjamController extends Controller
 
         return view('peminjam.riwayat', compact('peminjaman'));
     }
+
+
+    // Tambahkan fungsi ini di dalam PeminjamController
+    public function hapus($id)
+    {
+        // Sesuaikan 'Peminjaman' dengan nama Model kamu
+        $peminjaman = \App\Models\Peminjaman::findOrFail($id);
+
+        // Validasi: Hanya bisa dihapus jika statusnya masih 'diajukan'
+        if ($peminjaman->status === 'diajukan') {
+            $peminjaman->delete();
+            return redirect()->back()->with('success', 'Pengajuan peminjaman berhasil dibatalkan/dihapus.');
+        }
+
+        // Jika statusnya bukan diajukan (misal sudah di-acc/dipinjam), tolak hapus
+        return redirect()->back()->with('error', 'Data tidak bisa dihapus karena alat sudah diproses atau dipinjam.');
+    }
+
+    public function ajukanKembali($id)
+    {
+        $peminjaman = \App\Models\Peminjaman::findOrFail($id);
+
+        if ($peminjaman->status === 'dipinjam') {
+            $peminjaman->update([
+                'status' => 'menunggu_persetujuan'
+            ]);
+
+            return redirect()->back()->with('success', 'Pengajuan pengembalian berhasil dikirim. Menunggu persetujuan petugas.');
+        }
+
+        return redirect()->back()->with('error', 'Hanya barang dengan status dipinjam yang bisa diajukan pengembalian.');
+}
 }
 

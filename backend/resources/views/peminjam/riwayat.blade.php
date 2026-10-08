@@ -31,7 +31,7 @@
     <main class="max-w-7xl mx-auto px-6 py-8">
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-slate-800">Riwayat Peminjaman Alat</h2>
-            <p class="text-sm text-slate-500 mt-1">Daftar alat dan barang yang pernah atau sedang kamu ajukan peminjamannya.</p>
+            <p class="text-sm text-slate-500 mt-1">Daftar alat dan barang yang pernah atau sedang kamu ajukan peminjamannya dan pengembaliannya.</p>
         </div>
 
         <!-- Card Container matching the catalog aesthetic -->
@@ -53,6 +53,7 @@
                             <th class="py-3 px-4 font-semibold">Rencana / Tgl Kembali</th>
                             <th class="py-3 px-4 font-semibold text-center">Total Keseluruhan</th>
                             <th class="py-3 px-4 font-semibold text-center">Status</th>
+                            <th class="py-3 px-4 w-32 font-semibold text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-sm">
@@ -66,7 +67,7 @@
                                             <!-- Tambahkan jumlah di dalam tanda kurung -->
                                                 <li>
                                                     {{ $detail->alat->nama_alat ?? 'Alat tidak ditemukan' }} 
-                                                    <span class="text-slate-500 font-normal">({{ $detail->jumlah ?? 1 }}pcs)</span>
+                                                    <span class="text-slate-500 font-normal">({{ $detail->jumlah ?? 1        }}pcs)</span>
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -96,13 +97,38 @@
                                         <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">
                                             Dikembalikan
                                         </span>
-                                    @elseif($status == 'telat' || $status == 'rejected' || $status == 'ditolak')
+                                    @elseif($status == 'telat')
                                         <span class="inline-block px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">
                                             Telat
                                         </span>
                                     @else
                                         <span class="inline-block px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-semibold">
                                             {{ ucfirst($pinjam->status ?? 'Pending') }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-4 text-center align-middle">
+                                        <span class="text-slate-400 text-xs italic"></span>
+                                    @if($pinjam->status === 'diajukan')
+                                        <form action="{{ route('peminjam.hapus', $pinjam->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah kamu yakin ingin membatalkan pengajuan ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1.5 rounded transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @endif
+                                        <span class="text-slate-400 text-xs italic"></span>
+                                    @if($pinjam->status == 'dipinjam')
+                                        <form action="{{ route('peminjam.ajukan_kembali', $pinjam->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition shadow-sm" onclick="return confirm('Ajukan pengembalian sekarang?')">
+                                                Ajukan Pengembalian
+                                            </button>
+                                        </form>
+                                    @elseif($pinjam->status == 'menunggu_persetujuan')
+                                        <span class="inline-block whitespace-nowrap text-xs font-semibold text-yellow-700 bg-yellow-100 px-3 py-1.5 rounded">
+                                            Menunggu Persetujuan
                                         </span>
                                     @endif
                                 </td>

@@ -52,6 +52,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/pengembalian/create', [AdminController::class, 'createPengembalian'])->name('pengembalian.create');
     Route::post('/pengembalian', [AdminController::class, 'storePengembalian'])->name('pengembalian.store'); 
     Route::delete('/pengembalian/{id}', [AdminController::class, 'destroyPengembalian'])->name('pengembalian.destroy');
+
+    # Fitur Laporan
+    Route::get('/laporan', [AdminController::class, 'indexLaporan'])->name('laporan.index');
+    Route::get('/laporan/cetak', [AdminController::class, 'cetakLaporan'])->name('laporan.cetak');
+
+    # Log Aktivitas
+    Route::get('/log-aktivitas', [AdminController::class, 'indexLogAktivitas'])->name('log-aktivitas.index');
     });
 
 # Petugas
@@ -62,25 +69,34 @@ Route::middleware(['auth', 'role:petugas,admin'])->prefix('petugas')->name('petu
     Route::post('/peminjaman/{id}/setujui', [PetugasController::class, 'setujuPeminjaman'])->name('peminjaman.setujui');
     Route::post('/peminjaman/{id}/tolak', [PetugasController::class, 'tolakPeminjaman'])->name('peminjaman.tolak');
 
-    # Pemantauan Pengembalian
+    # Mantau masee
     Route::get('/pengembalian', [PetugasController::class, 'indexPengembalian'])->name('pengembalian.index');
 
+    # Antre mase
+    Route::get('/pengembalian/menunggu', [PetugasController::class, 'menungguPengembalian'])->name('pengembalian.menunggu');
+
     # Pengembalian & Denda
-    Route::get('/pengembalian', [PetugasController::class, 'indexPengembalian'])->name('pengembalian.index');
+    Route::get('/pengembalian/{id}/proses', [PetugasController::class, 'halamanProses'])->name('pengembalian.halaman_proses');
     Route::post('/pengembalian/{id}', [PetugasController::class, 'prosesPengembalian'])->name('pengembalian.proses');
 
     # Fitur Laporan
     Route::get('/laporan', [PetugasController::class, 'indexLaporan'])->name('laporan.index');
     Route::get('/laporan/cetak', [PetugasController::class, 'cetakLaporan'])->name('laporan.cetak');
+    Route::get('/laporan/excel', [PetugasController::class, 'exportExcel'])->name('laporan.excel');
 });
 
 
 # Peminjam
 Route::middleware(['auth', 'role:peminjam'])->prefix('peminjam')->name('peminjam.')->group(function () {
+
     # Katalog & Pengajuan
     Route::get('/katalog', [PeminjamController::class, 'katalogAlat'])->name('katalog');
-    Route::post('/peminjaman/ajukan', [PeminjamController::class, 'ajukanPeminjaman'])->name('peminjaman.ajukan');
+    Route::post('/ajukan', [PeminjamController::class, 'ajukanPeminjaman'])->name('ajukan');
     Route::get('/riwayat', [PeminjamController::class, 'riwayatPeminjaman'])->name('riwayat');
+    Route::post('/{id}/ajukan-kembali', [PeminjamController::class, 'ajukanKembali'])->name('ajukan_kembali');
+
+    # Hapus Pengajuan
+    Route::delete('/{id}/hapus', [App\Http\Controllers\PeminjamController::class, 'hapus'])->name('hapus');
 });
 
 

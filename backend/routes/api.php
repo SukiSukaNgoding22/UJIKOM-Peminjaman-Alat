@@ -27,21 +27,26 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role.admin')->group(function () {
         Route::apiResource('kategori', KategoriController::class);
         Route::apiResource('alat', AlatController::class);
+
         # Katalog
         Route::get('/katalog', [AlatController::class, 'katalog']);
+
         # User
         Route::apiResource('users', UserController::class);
+
         # Peminjaman
         Route::get('/peminjaman', [PeminjamanController::class, 'index']);
         Route::get('/peminjaman/{peminjaman}', [PeminjamanController::class, 'show']);
         Route::post('/peminjaman/{peminjaman}/approve', [PeminjamanController::class, 'approve']);
         Route::put('/peminjaman/{peminjaman}', [PeminjamanController::class, 'update']);
         Route::delete('/peminjaman/{peminjaman}', [PeminjamanController::class, 'destroy']);
+
         # Pengembalian
         Route::get('/pengembalian', [PengembalianController::class, 'index']);
         Route::get('/pengembalian/{pengembalian}', [PengembalianController::class, 'show']);
         Route::put('/pengembalian/{pengembalian}', [PengembalianController::class, 'update']);
         Route::delete('/pengembalian/{pengembalian}', [PengembalianController::class, 'destroy']);
+        
         # Log Aktivitas
         Route::get('/log-aktivitas', [LogAktivitasController::class, 'index']);
     });
