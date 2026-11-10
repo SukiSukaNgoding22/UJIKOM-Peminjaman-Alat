@@ -23,11 +23,13 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }
-        /* Memastikan gambar seragam ukurannya */
+        /* Memastikan gambar memenuhi satu kotak penuh tanpa celah */
         .product-img {
-            height: 180px;
-            object-fit: cover;
+            height: 200px;
+            object-fit: contain;
             width: 100%;
+            background-color: #f1f5f9;
+            padding: 8px;
         }
     </style>
 </head>
@@ -37,19 +39,38 @@
     <header class="bg-blue-600 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-wide">Panel Peminjam</h1>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('peminjam.riwayat') }}" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Riwayat Pinjam
-                </a>
-                <form action="{{ route('logout') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="bg-white text-blue-600 hover:bg-slate-100 px-4 py-2 rounded-lg text-sm font-semibold shadow transition">
-                        Logout
-                    </button>
-                </form>
+            <div class="relative">
+                <button type="button" onclick="document.getElementById('peminjamMenu').classList.toggle('hidden')"
+                    class="p-2 rounded-lg hover:bg-white/20 transition" aria-label="Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div id="peminjamMenu" class="hidden absolute right-0 mt-2 w-48 bg-white text-slate-700 rounded-lg shadow-lg py-2 z-50">
+                    <a href="{{ route('peminjam.katalog') }}" class="block px-4 py-2 text-sm hover:bg-slate-100">
+                        <i class="fa-solid fa-toolbox mr-2 text-blue-600"></i> Katalog Alat
+                    </a>
+                    <a href="{{ route('peminjam.riwayat') }}" class="block px-4 py-2 text-sm hover:bg-slate-100">
+                        <i class="fa-solid fa-clock-rotate-left mr-2 text-blue-600"></i> Riwayat Pinjam
+                    </a>
+                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm hover:bg-slate-100">
+                        <i class="fa-solid fa-user mr-2 text-blue-600"></i> Profil
+                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-slate-100 text-red-600">
+                            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </header>
+
+    <script>
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('peminjamMenu');
+            if (menu && !e.target.closest('.relative')) menu.classList.add('hidden');
+        });
+    </script>
 
     <!-- KONTEN UTAMA -->
     <div class="container mt-8 mb-12">
@@ -75,7 +96,7 @@
                         <label class="form-label font-semibold text-slate-700">Rencana Tanggal Kembali <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-slate-100"><i class="fa-regular fa-calendar"></i></span>
-                            <input type="date" name="tgl_kembali_plan" class="form-control" required>
+                            <input type="date" name="tgl_kembali_plan" class="form-control" min="{{ now()->format('Y-m-d') }}" required>
                         </div>
                     </div>
                 </div>

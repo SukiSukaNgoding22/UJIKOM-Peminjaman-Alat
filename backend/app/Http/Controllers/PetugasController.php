@@ -29,6 +29,23 @@ class PetugasController extends Controller
         return view('petugas.peminjaman.index', compact('peminjamans', 'search'));
     }
 
+    public function pantauPeminjaman()
+    {
+        $search = request()->input('search');
+
+        $peminjamans = Peminjaman::with(['user', 'detailPinjam.alat'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('petugas.peminjaman.pantau', compact('peminjamans', 'search'));
+    }
+
     public function setujuPeminjaman($id)
     {
         DB::beginTransaction();

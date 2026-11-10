@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Persetujuan Peminjaman')
+@section('title', 'Kelola Peminjaman')
 @section('header-title', 'Daftar Pengajuan Peminjaman Alat')
 
 @section('content')
@@ -21,7 +21,11 @@
     <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
         {{-- Header & Form Pencarian --}}
         <div class="p-5 border-b border-gray-200 bg-gray-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <h3 class="text-lg font-bold text-gray-800">Menunggu Verifikasi Persetujuan</h3>
+<h3 class="text-lg font-bold text-gray-800 flex items-center gap-3 flex-1">
+                Menunggu Verifikasi Persetujuan
+                <a href="{{ route('petugas.pantau') }}"
+                    class="ml-auto text-lg font-semibold text-gray-500 hover:text-emerald-600 border-b-2 border-gray-400 hover:border-emerald-600 transition-all duration-200 pb-0.5">Pantau</a>
+            </h3>
             
             <form action="{{ route('petugas.peminjaman.index') }}" method="GET" class="flex w-full md:w-80">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama peminjam..."

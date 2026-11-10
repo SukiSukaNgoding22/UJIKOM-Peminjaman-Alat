@@ -58,7 +58,7 @@
                 <a href="{{ route('petugas.peminjaman.index') }}"
                    class="block px-4 py-2 rounded-lg transition {{ 
                     request()->routeIs('petugas.peminjaman.*') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
-                    Persetujuan Peminjaman
+                    Kelola Peminjaman
                 </a>
 
                 <a href="{{ route('petugas.pengembalian.index') }}"
@@ -81,9 +81,20 @@
                 @endif
             </nav>
 
-            <div class="p-4 border-t border-gray-800 text-sm text-gray-400">
-                Logged in as: <span class="text-white font-semibold">{{ auth()->user()->name }}</span>
-            </div>
+            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-4 border-t border-gray-800 hover:bg-gray-800 transition">
+                @if(auth()->user()->foto_profile)
+                    <img src="{{ Storage::url(auth()->user()->foto_profile) }}" alt="Foto Profil"
+                        class="w-10 h-10 rounded-full object-cover border border-gray-700">
+                @else
+                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
+                <div class="text-sm leading-tight">
+                    <div class="text-white font-semibold">{{ auth()->user()->name }}</div>
+                    <div class="text-gray-400 text-xs">Edit Profil</div>
+                </div>
+            </a>
         </aside>
 
         <!-- MAIN CONTENT CONTAINER -->
